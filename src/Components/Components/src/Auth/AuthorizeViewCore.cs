@@ -52,6 +52,8 @@ namespace Microsoft.AspNetCore.Components
         /// <inheritdoc />
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
+            // We're using the same sequence number for each of the content items here
+            // so that we can update existing instances if they are the same shape
             if (currentAuthenticationState == null)
             {
                 builder.AddContent(0, Authorizing);
@@ -59,11 +61,11 @@ namespace Microsoft.AspNetCore.Components
             else if (isAuthorized)
             {
                 var authorizedContent = Authorized ?? ChildContent;
-                builder.AddContent(1, authorizedContent?.Invoke(currentAuthenticationState));
+                builder.AddContent(0, authorizedContent?.Invoke(currentAuthenticationState));
             }
             else
             {
-                builder.AddContent(2, NotAuthorized?.Invoke(currentAuthenticationState));
+                builder.AddContent(0, NotAuthorized?.Invoke(currentAuthenticationState));
             }
         }
 
